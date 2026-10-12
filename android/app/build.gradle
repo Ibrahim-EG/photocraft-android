@@ -1,0 +1,23 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.photocraft.app'
+    compileSdk 34
+    ndkVersion "25.2.9519653"
+
+    defaultConfig {
+        applicationId "com.photocraft.app"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+}
