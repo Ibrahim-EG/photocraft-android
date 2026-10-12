@@ -88,6 +88,7 @@ fn save_filters(suggested: &str) -> Vec<(String, Vec<String>)> {
 /// Shows an Open or Save dialog without blocking the event loop (#673, #574): rfd's async dialog
 /// is created here, on the main thread, with the window as its parent (a sheet on macOS, an owned
 /// modal window elsewhere), and a helper thread waits for it and hands the answer to the app.
+#[cfg(not(target_os = "android"))]
 fn show_file_dialog(request: FileDialogRequest, parent: Option<&eframe::Frame>, reply: FileDialogReply) {
     let mut dialog = rfd::AsyncFileDialog::new();
     if let Some(parent) = parent {
@@ -139,6 +140,7 @@ fn show_file_dialog(request: FileDialogRequest, parent: Option<&eframe::Frame>, 
     }
 }
 
+#[cfg(not(target_os = "android"))]
 fn path_of(file: &rfd::FileHandle) -> String {
     file.path().to_string_lossy().into_owned()
 }
@@ -320,6 +322,12 @@ fn shell_word(s: &str) -> String {
     if s.bytes().all(|b| b.is_ascii_alphanumeric() || b"/._-+:,@".contains(&b)) { s.to_string() } else { format!("'{}'", s.replace('\'', r"'\''")) }
 }
 
+#[cfg(target_os = "android")]
+pub fn native(_automation: Option<photocraft_automation::AuthorizedWorkspace>) -> Services {
+    Services::default()
+}
+
+#[cfg(not(target_os = "android"))]
 pub fn native(automation: Option<photocraft_automation::AuthorizedWorkspace>) -> Services {
     let clip: Rc<RefCell<Option<arboard::Clipboard>>> = Rc::default();
     let automation_read = automation.clone().map(|workspace| {
