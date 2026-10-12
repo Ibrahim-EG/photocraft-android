@@ -32,6 +32,7 @@ photocraft-tablet = { workspace = true }
 egui = { workspace = true }
 serde_json = { workspace = true }
 log = { workspace = true }
+ron = "0.12"
 
 [target.'cfg(all(not(target_arch = "wasm32"), not(target_os = "android")))'.dependencies]
 rfd = { workspace = true }
